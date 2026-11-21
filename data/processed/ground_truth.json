@@ -1,0 +1,41 @@
+{
+  "Ampicillin": {
+    "blaTEM-1": 1.8,
+    "blaCTX-M-15": 2.2,
+    "blaCTX-M-14": 2.0,
+    "blaSHV-12": 2.1,
+    "blaOXA-1": 1.4,
+    "blaNDM-1": 2.6,
+    "blaKPC-2": 2.6
+  },
+  "Ciprofloxacin": {
+    "gyrA_S83L": 2.4,
+    "gyrA_D87N": 2.0,
+    "parC_S80I": 1.3
+  },
+  "Tetracycline": {
+    "tetA": 2.1,
+    "tetB": 2.2,
+    "tetM": 2.3
+  },
+  "Gentamicin": {
+    "aac(3)-IIa": 2.2,
+    "aac(6')-Ib": 1.6,
+    "ant(2'')-Ia": 1.4,
+    "aph(3')-Ia": 1.1,
+    "blaNDM-1": 2.0,
+    "blaKPC-2": 2.0
+  },
+  "TMP-SMX": {
+    "sul1": 1.9,
+    "sul2": 1.8,
+    "sul3": 1.6,
+    "dfrA1": 1.7,
+    "dfrA12": 1.7,
+    "dfrA17": 1.6
+  },
+  "Colistin": {
+    "mcr-1": 2.8,
+    "mcr-3": 2.6
+  }
+}

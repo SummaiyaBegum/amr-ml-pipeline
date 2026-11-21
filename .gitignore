@@ -1,0 +1,8 @@
+# raw downloads can be large; keep them out of git
+data/raw/
+models/*.joblib
+models/*.pkl
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.streamlit/

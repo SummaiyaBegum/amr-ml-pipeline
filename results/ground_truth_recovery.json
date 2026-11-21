@@ -1,0 +1,91 @@
+{
+  "Ampicillin": {
+    "true_drivers": {
+      "blaTEM-1": 1.8,
+      "blaCTX-M-15": 2.2,
+      "blaCTX-M-14": 2.0,
+      "blaSHV-12": 2.1,
+      "blaOXA-1": 1.4,
+      "blaNDM-1": 2.6,
+      "blaKPC-2": 2.6
+    },
+    "recovered_in_top8": [
+      "blaTEM-1",
+      "blaCTX-M-15",
+      "blaSHV-12",
+      "blaOXA-1"
+    ],
+    "recall": 0.571
+  },
+  "Ciprofloxacin": {
+    "true_drivers": {
+      "gyrA_S83L": 2.4,
+      "gyrA_D87N": 2.0,
+      "parC_S80I": 1.3
+    },
+    "recovered_in_top8": [
+      "gyrA_S83L",
+      "gyrA_D87N",
+      "parC_S80I"
+    ],
+    "recall": 1.0
+  },
+  "Tetracycline": {
+    "true_drivers": {
+      "tetA": 2.1,
+      "tetB": 2.2,
+      "tetM": 2.3
+    },
+    "recovered_in_top8": [
+      "tetA",
+      "tetB",
+      "tetM"
+    ],
+    "recall": 1.0
+  },
+  "Gentamicin": {
+    "true_drivers": {
+      "aac(3)-IIa": 2.2,
+      "aac(6')-Ib": 1.6,
+      "ant(2'')-Ia": 1.4,
+      "aph(3')-Ia": 1.1,
+      "blaNDM-1": 2.0,
+      "blaKPC-2": 2.0
+    },
+    "recovered_in_top8": [
+      "aac(3)-IIa",
+      "aac(6')-Ib",
+      "ant(2'')-Ia",
+      "aph(3')-Ia"
+    ],
+    "recall": 0.667
+  },
+  "TMP-SMX": {
+    "true_drivers": {
+      "sul1": 1.9,
+      "sul2": 1.8,
+      "sul3": 1.6,
+      "dfrA1": 1.7,
+      "dfrA12": 1.7,
+      "dfrA17": 1.6
+    },
+    "recovered_in_top8": [
+      "sul1",
+      "sul2",
+      "dfrA1",
+      "dfrA12",
+      "dfrA17"
+    ],
+    "recall": 0.833
+  },
+  "Colistin": {
+    "true_drivers": {
+      "mcr-1": 2.8,
+      "mcr-3": 2.6
+    },
+    "recovered_in_top8": [
+      "mcr-1"
+    ],
+    "recall": 0.5
+  }
+}

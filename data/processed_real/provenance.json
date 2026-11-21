@@ -1,0 +1,43 @@
+{
+  "source": "BV-BRC (bv-brc.org)",
+  "taxon_id": 562,
+  "organism": "Escherichia coli",
+  "fetched_utc": "2026-11-21T19:01:52+00:00",
+  "genomes": 477,
+  "genes": 160,
+  "genes_dropped_uninformative": 199,
+  "antibiotics": [
+    "Ampicillin",
+    "Cefotaxime",
+    "Ceftriaxone",
+    "Ciprofloxacin",
+    "Gentamicin",
+    "Trimethoprim-sulfamethoxazole"
+  ],
+  "class_balance": {
+    "Ampicillin": {
+      "S": 68,
+      "R": 48
+    },
+    "Cefotaxime": {
+      "S": 100,
+      "R": 15
+    },
+    "Ceftriaxone": {
+      "R": 15,
+      "S": 13
+    },
+    "Ciprofloxacin": {
+      "S": 94,
+      "R": 19
+    },
+    "Gentamicin": {
+      "S": 112,
+      "R": 14
+    },
+    "Trimethoprim-sulfamethoxazole": {
+      "S": 79,
+      "R": 17
+    }
+  }
+}

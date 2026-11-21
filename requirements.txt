@@ -1,0 +1,9 @@
+numpy>=1.26
+pandas>=2.0
+scikit-learn>=1.4
+scipy>=1.11
+matplotlib>=3.7
+joblib>=1.3
+requests>=2.31
+# optional, for the interactive demo app
+streamlit>=1.30

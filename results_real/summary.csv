@@ -1,0 +1,7 @@
+antibiotic,auroc,auroc_sd,f1,sensitivity,specificity
+Ciprofloxacin,0.648,0.151,0.117,0.15,0.965
+Ceftriaxone,0.621,0.133,0.253,0.333,0.961
+Trimethoprim-sulfamethoxazole,0.613,0.176,0.09,0.117,0.954
+Ampicillin,0.566,0.138,0.179,0.144,0.937
+Gentamicin,0.528,0.137,0.261,0.3,0.978
+Cefotaxime,0.376,0.153,0.0,0.0,0.987
