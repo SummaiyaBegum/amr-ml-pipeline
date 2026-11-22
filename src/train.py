@@ -16,7 +16,6 @@ Design choices that mirror the KAUST project description:
 Run:
     py -3 -I src/train.py [--data-dir data/processed] [--out-dir results]
 """
-
 import argparse
 import json
 from pathlib import Path
@@ -24,12 +23,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import joblib
+import shap
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_validate
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, f1_score, recall_score, make_scorer
+
 
 SEED = 7
 N_SPLITS = 5
@@ -89,6 +90,43 @@ def get_importances(model, gene_cols):
     return s.to_dict()
 
 
+def compute_shap_importance(model, X, gene_cols):
+    """Compute mean absolute SHAP values for each feature for a fitted model."""
+    clf = model.named_steps["clf"]
+    if hasattr(clf, "feature_importances_"):  # tree-based
+        explainer = shap.TreeExplainer(clf)
+        shap_vals = explainer.shap_values(X)  # list of arrays (one per class)
+        if len(shap_vals) >= 2:
+            class_shap = shap_vals[1]  # binary classification: class 1 (resistant)
+        else:
+            # Fallback: use class 0 and add dimension
+            class_shap = shap_vals[0][:, np.newaxis]  # (n_samples, 1)
+    else:  # linear model
+        explainer = shap.LinearExplainer(clf, X, feature_perturbation="interventional")
+        shap_vals = explainer.shap_values(X)
+        if len(shap_vals) >= 2:
+            class_shap = shap_vals[1]
+        else:
+            class_shap = shap_vals[0][:, np.newaxis]  # fallback
+
+    # Ensure class_shap is 2D: (n_samples, n_features)
+    if class_shap.ndim == 1:
+        class_shap = class_shap[:, np.newaxis]  # (n_samples, 1)
+
+    # Compute mean absolute SHAP per feature (across samples)
+    mean_abs = np.mean(np.abs(class_shap), axis=0)  # (n_features,)
+
+    # Align with gene_cols length to avoid index errors
+    n_features = len(gene_cols)
+    if mean_abs.shape[0] < n_features:
+        mean_abs = np.pad(mean_abs, (0, n_features - mean_abs.shape[0]), mode='constant')
+    elif mean_abs.shape[0] > n_features:
+        mean_abs = mean_abs[:n_features]
+
+    imp_dict = {gene: float(mean_abs[i]) for i, gene in enumerate(gene_cols)}
+    return imp_dict
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", default="data/processed")
@@ -106,6 +144,7 @@ def main():
 
     all_metrics = {}
     all_importances = {}
+    shap_feature_importance = {}
 
     for abx in abx_cols:
         y_bin = (df[abx] == "R").astype(int).to_numpy()
@@ -126,6 +165,9 @@ def main():
             joblib.dump(model, model_dir / f"{abx}_{name}.joblib")
             imp = get_importances(model, gene_cols)
             all_importances[abx][name] = imp
+            # compute SHAP importance
+            shap_imp = compute_shap_importance(model, X, gene_cols)
+            shap_feature_importance.setdefault(abx, {})[name] = shap_imp
 
             auc = metrics["auroc"]["mean"]; auc_sd = metrics["auroc"]["std"]
             f1 = metrics["f1"]["mean"]
@@ -138,6 +180,8 @@ def main():
         json.dump(all_metrics, f, indent=2)
     with open(out_dir / "feature_importance.json", "w", encoding="utf-8") as f:
         json.dump(all_importances, f, indent=2)
+    with open(out_dir / "shap_feature_importance.json", "w", encoding="utf-8") as f:
+        json.dump(shap_feature_importance, f, indent=2)
 
     # compact summary table (RandomForest)
     rows = []
@@ -155,8 +199,14 @@ def main():
     summary.to_csv(out_dir / "summary.csv", index=False)
     print("\n=== Summary (RandomForest) ===")
     print(summary.to_string(index=False))
-    print(f"\nSaved models -> {model_dir}/, metrics -> {out_dir}/")
+    print(f"\nSaved models -> {model_dir}/, metrics -> {out_dir}/, SHAP importance -> {out_dir}/")
 
+    # also write summary of SHAP top biomarkers per antibiotic
+    for abx, models_shap in shap_feature_importance.items():
+        print(f"\nSHAP top biomarkers for {abx}:")
+        for name, imp_dict in models_shap.items():
+            top = list(imp_dict.items())[:5]
+            print(f"  {name}: " + ", ".join(f"{g}({v:.3f})" for g, v in top))
 
 if __name__ == "__main__":
     main()

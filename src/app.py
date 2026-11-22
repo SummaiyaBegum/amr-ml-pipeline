@@ -31,8 +31,8 @@ st.caption(
     "with src/fetch_data.py."
 )
 
-# Discover trained models
-model_files = sorted(MODEL_DIR.glob("*_RandomForest.joblib"))
+# Discover trained models (both RandomForest and LogisticRegression)
+model_files = sorted(MODEL_DIR.glob("*_RandomForest.joblib") + MODEL_DIR.glob("*_LogisticRegression.joblib"))
 if not model_files:
     st.error("No trained models found. Run `py -3 -I src/train.py` first.")
     st.stop()
